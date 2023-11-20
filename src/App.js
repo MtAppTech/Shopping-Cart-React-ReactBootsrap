@@ -11,7 +11,7 @@ import ProductList from "./pages/ProductList";
 function App() {
   return (
     <Router>
-      
+      <AppNavbar/>
       <Routes>
         <Route exact path="/" element={<Main />} />
         <Route path="/about" element={<About />} />
