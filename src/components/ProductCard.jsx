@@ -1,8 +1,23 @@
 import axios from "axios";
 import React from "react";
 
-const ProductCard = ({product, getData}) => {
-    const {id, name , price , dampingRate, amount, image} =product 
+const ProductCard = ({ product, getData }) => {
+  const { id, name, price, dampingRate, amount, image } = product;
+  const handleMinus = async (id) => {
+    await axios.put(
+      `https://63f4e5583f99f5855db9e941.mockapi.io/products/${id}`,
+      { ...product, amount: amount - 1 }
+    ); //...pruduct  diger verileri al
+    getData();
+  };
+  const handlePlus = async () => {
+    await axios.put(
+      `https://63f4e5583f99f5855db9e941.mockapi.io/products/${id}`,  //id zaten aliyor
+      { ...product, amount: amount + 1 }
+    ); //...pruduct  diger verileri al
+    getData();
+  };
+
   return (
     <div className="card shadow-lg mb-3">
       <div className="row g-0">
@@ -16,18 +31,34 @@ const ProductCard = ({product, getData}) => {
         </div>
         <div className="col-md-7">
           <div className="card-body">
-            <h5 className="card-title" role="button">{name}</h5>
+            <h5 className="card-title" role="button">
+              {name}
+            </h5>
             <div className="product-price d-flex flex-wrap align-items-center">
-              <span className="damping-price text-warning h2">$ {(price*dampingRate).toFixed(2)}</span>
-              <span className="h5 text-dark text-decoration-line-through ms-2"> {parseFloat(price).toFixed(2)}</span>
+              <span className="damping-price text-warning h2">
+                $ {(price * dampingRate).toFixed(2)}
+              </span>
+              <span className="h5 text-dark text-decoration-line-through ms-2">
+                {" "}
+                {parseFloat(price).toFixed(2)}
+              </span>
             </div>
             <div className="border border-1 border-dark shadow-lg d-flex justify-content-center p-2">
               <div className="quantity-controller">
                 <button className="btn btn-secondary btn-sm">
-                  <i className="fas fa-minus"></i>
+                  <i
+                    className="fas fa-minus"
+                    onClick={() => handleMinus(id)}
+                  ></i>
                 </button>
-                <p className="d-inline mx-4" id="product-quantity">{amount}</p>
-                <button className="btn btn-secondary btn-sm">
+                <p className="d-inline mx-4" id="product-quantity">
+                  {amount}
+                </p>
+                <button 
+                className="btn btn-secondary btn-sm"
+                onClick={handlePlus}
+                
+                >
                   <i className="fas fa-plus"></i>
                 </button>
               </div>
@@ -38,7 +69,10 @@ const ProductCard = ({product, getData}) => {
               </button>
             </div>
             <div className="mt-2">
-              Product Total: $<span className="product-line-price"></span>
+              Product Total: $
+              <span className="product-line-price">
+                {(price * dampingRate * amount).toFixed(2)}
+              </span>
             </div>
           </div>
         </div>
