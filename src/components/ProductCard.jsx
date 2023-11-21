@@ -12,9 +12,15 @@ const ProductCard = ({ product, getData }) => {
   };
   const handlePlus = async () => {
     await axios.put(
-      `https://63f4e5583f99f5855db9e941.mockapi.io/products/${id}`,  //id zaten aliyor
+      `https://63f4e5583f99f5855db9e941.mockapi.io/products/${id}`, //id zaten aliyor
       { ...product, amount: amount + 1 }
     ); //...pruduct  diger verileri al
+    getData();
+  };
+  const handleRemove = async () => {
+    await axios.delete(
+      `https://63f4e5583f99f5855db9e941.mockapi.io/products/${id}`
+    );
     getData();
   };
 
@@ -54,17 +60,19 @@ const ProductCard = ({ product, getData }) => {
                 <p className="d-inline mx-4" id="product-quantity">
                   {amount}
                 </p>
-                <button 
-                className="btn btn-secondary btn-sm"
-                onClick={handlePlus}
-                
+                <button
+                  className="btn btn-secondary btn-sm"
+                  onClick={handlePlus}
                 >
                   <i className="fas fa-plus"></i>
                 </button>
               </div>
             </div>
             <div className="product-removal mt-4">
-              <button className="btn btn-danger btn-sm w-100 remove-product">
+              <button
+                className="btn btn-danger btn-sm w-100 remove-product"
+                onClick={handleRemove}
+              >
                 <i className="fa-solid fa-trash-can me-2"></i>Remove
               </button>
             </div>
