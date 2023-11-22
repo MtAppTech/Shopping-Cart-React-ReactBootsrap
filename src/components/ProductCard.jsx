@@ -1,19 +1,25 @@
 import axios from "axios";
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 const ProductCard = ({ product, getData }) => {
   const { id, name, price, dampingRate, amount, image } = product;
+  const navigate = useNavigate();
   const handleMinus = async (id) => {
-    await axios.put(
-      `https://63f4e5583f99f5855db9e941.mockapi.io/products/${id}`,
-      { ...product, amount: amount - 1 }
-    ); //...pruduct  diger verileri al
-    getData();
+    if (Number(amount) > 1) {
+      await axios.put(
+        `https://63f4e5583f99f5855db9e941.mockapi.io/products/${id}`,
+        { ...product, amount: Number(amount) - 1 }
+      ); //...pruduct  diger verileri al
+      getData();
+    } else {
+      handleRemove();
+    }
   };
   const handlePlus = async () => {
     await axios.put(
       `https://63f4e5583f99f5855db9e941.mockapi.io/products/${id}`, //id zaten aliyor
-      { ...product, amount: amount + 1 }
+      { ...product, amount: Number(amount) + 1 }
     ); //...pruduct  diger verileri al
     getData();
   };
@@ -37,7 +43,13 @@ const ProductCard = ({ product, getData }) => {
         </div>
         <div className="col-md-7">
           <div className="card-body">
-            <h5 className="card-title" role="button">
+            <h5
+              className="card-title"
+              role="button"
+              onClick={() =>
+                navigate("/update-product", { state: { product } })
+              }
+            >
               {name}
             </h5>
             <div className="product-price d-flex flex-wrap align-items-center">
